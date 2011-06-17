@@ -1,19 +1,23 @@
+# source 'http://rubygems.org'
 source :rubygems
 source :rubyforge
 source :gemcutter
 
-gem 'bundler', '~> 1.0.0'
-gem 'rails', '2.3.14'
-gem 'rack' , '~> 1.1.1'
-gem 'i18n', '>= 0.4.2'
-gem 'rubytree', '0.5.2', :require => 'tree'
-# gem 'coderay', '~> 0.9.7'
+gem 'rails', '3.0.11'
+
+# gem 'rubytree', '0.5.2', :require => 'tree'
+gem 'rubytree', '0.7.0'
 gem 'coderay'
 
 gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :jruby, :mingw_18]
 
 # TODO rails-3.1: review the core changes to awesome_nested_set and decide on actions
 gem 'awesome_nested_set'
+
+# gem 'ruby-prof', :git => 'http://github.com/wycats/ruby-prof.git'
+gem 'ruby-prof'
+# gem 'jquery-rails'
+# gem 'prototype-rails'
 
 group :development do
 end
@@ -22,6 +26,7 @@ group :production do
 end
 
 group :test do
+  gem 'test-unit'
   gem 'shoulda'
   gem 'mocha'
   gem 'edavis10-object_daddy', :require => 'object_daddy'

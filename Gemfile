@@ -1,13 +1,17 @@
 source :rubygems
 
-gem "rails", "2.3.14"
-gem "i18n", "~> 0.4.2"
+gem "rails", "~> 3.0.0"
+gem "rubytree"
 gem "coderay", "~> 1.0.0"
 gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :mingw_18, :jruby]
 gem "tzinfo", "~> 0.3.31"
 
 # TODO rails-3.1: review the core changes to awesome_nested_set and decide on actions
 gem "awesome_nested_set"
+
+gem "ruby-prof"
+# gem "jquery-rails"
+# gem "prototype-rails"
 
 # Optional gem for LDAP authentication
 group :ldap do
@@ -71,6 +75,7 @@ group :development do
 end
 
 group :test do
+  gem "test-unit"
   gem "shoulda", "~> 2.11"
   gem "edavis10-object_daddy", :require => "object_daddy"
   gem "mocha"

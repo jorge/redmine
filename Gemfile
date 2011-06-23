@@ -22,7 +22,7 @@ group :production do
 end
 
 group :test do
-  gem 'shoulda', '~> 2.10.3'
+  gem 'shoulda'
   gem 'mocha'
   gem 'edavis10-object_daddy', :require => 'object_daddy'
 

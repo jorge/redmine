@@ -306,7 +306,7 @@ class IssuesControllerTest < ActionController::TestCase
     get :index, :format => 'csv'
     assert_response :success
     assert_not_nil assigns(:issues)
-    assert_equal 'text/csv', @response.content_type
+    assert_equal 'text/csv; header=present', @response.content_type
     assert @response.body.starts_with?("#,")
     lines = @response.body.chomp.split("\n")
     assert_equal assigns(:query).columns.size + 1, lines[0].split(',').size
@@ -316,7 +316,7 @@ class IssuesControllerTest < ActionController::TestCase
     get :index, :project_id => 1, :format => 'csv'
     assert_response :success
     assert_not_nil assigns(:issues)
-    assert_equal 'text/csv', @response.content_type
+    assert_equal 'text/csv; header=present', @response.content_type
   end
 
   def test_index_csv_with_description

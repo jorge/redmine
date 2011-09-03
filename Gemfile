@@ -12,6 +12,9 @@ gem 'coderay'
 
 gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :jruby, :mingw_18]
 
+# TODO rails-3.1: review the core changes to awesome_nested_set and decide on actions
+gem 'awesome_nested_set'
+
 group :development do
 end
 

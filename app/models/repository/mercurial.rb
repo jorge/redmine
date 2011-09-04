@@ -29,12 +29,12 @@ class Repository::Mercurial < Repository
   # number of changesets to fetch at once
   FETCH_AT_ONCE = 100
 
-  def self.human_attribute_name(attribute_key_name, *args)
+  def self.human_attribute_name(attribute_key_name, options = {})
     attr_name = attribute_key_name
     if attr_name == "url"
       attr_name = "path_to_repository"
     end
-    super(attr_name, *args)
+    super(attr_name, options)
   end
 
   def self.scm_adapter_class

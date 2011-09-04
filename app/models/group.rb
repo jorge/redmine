@@ -51,12 +51,12 @@ class Group < Principal
     end
   end
 
-  def self.human_attribute_name(attribute_key_name, *args)
+  def self.human_attribute_name(attribute_key_name, options = {})
     attr_name = attribute_key_name
     if attr_name == 'lastname'
       attr_name = "name"
     end
-    super(attr_name, *args)
+    super(attr_name, options)
   end
 
   private

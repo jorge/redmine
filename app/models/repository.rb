@@ -48,12 +48,12 @@ class Repository < ActiveRecord::Base
     end
   end
 
-  def self.human_attribute_name(attribute_key_name, *args)
+  def self.human_attribute_name(attribute_key_name, options = {})
     attr_name = attribute_key_name
     if attr_name == "log_encoding"
       attr_name = "commit_logs_encoding"
     end
-    super(attr_name, *args)
+    super(attr_name, options)
   end
 
   alias :attributes_without_extra_info= :attributes=

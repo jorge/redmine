@@ -24,7 +24,7 @@ class Redmine::Views::LabelledFormBuilder < ActionView::Helpers::FormBuilder
         %w(date_select)).each do |selector|
     src = <<-END_SRC
     def #{selector}(field, options = {})
-      label_for_field(field, options) + super(field, options.except(:label))
+      label_for_field(field, options) + super(field, options.except(:label)).html_safe
     end
     END_SRC
     class_eval src, __FILE__, __LINE__

@@ -26,6 +26,8 @@ gem 'ruby-prof'
 # gem 'jquery-rails'
 # gem 'prototype-rails'
 
+gem 'therubyracer', :platforms => [:mri_18, :mri_19]
+
 group :development do
 end
 

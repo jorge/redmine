@@ -5,6 +5,8 @@ source :gemcutter
 
 gem 'rails', '3.0.11'
 
+gem 'dynamic_form'
+
 # gem 'rubytree', '0.5.2', :require => 'tree'
 gem 'rubytree', '0.7.0'
 gem 'coderay'

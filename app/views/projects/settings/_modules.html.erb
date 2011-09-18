@@ -1,7 +1,9 @@
-<% form_for :project, @project,
-            :url => { :action => 'modules', :id => @project },
-            :html => {:id => 'modules-form',
-                      :method => :post} do |f| %>
+<%= form_for @project, {
+                :as => :project,
+                :url => { :action => 'modules', :id => @project },
+                :html => {:id => 'modules-form',
+                          :method => :post} 
+             } do |f| %>
 
 <div class="box">
 <fieldset>

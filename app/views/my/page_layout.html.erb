@@ -40,14 +40,16 @@ function removeBlock(block) {
 <%= select_tag 'block',
                "<option></option>".html_safe + options_for_select(@block_options),
                :id => "block-select" %>
-<%= link_to_remote l(:button_add),
-           {:url => { :action => "add_block" },
+<%= link_to(
+          l(:button_add),
+          { :action => "add_block" },
+          { :remote => true,
             :with => "Form.serialize('block-form')",
             :update => "list-top",
             :position => :top,
-            :complete => "afterAddBlock();"
-           }, :class => 'icon icon-add'
-             %>
+            :complete => "afterAddBlock();",
+            :class => 'icon icon-add' }
+       ) %>
 <% end %>
 <%= link_to l(:button_back), {:action => 'page'}, :class => 'icon icon-cancel' %>
 </div>

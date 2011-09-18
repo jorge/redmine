@@ -35,14 +35,16 @@
             "$('member-#{membership.id}-roles').hide(); $('member-#{membership.id}-roles-form').show(); return false;",
             :class => 'icon icon-edit'
           ) %>
-      <%= link_to_remote(
+      <%= link_to(
             l(:button_delete),
-            { :url => { :controller => 'groups',
+            { :controller => 'groups',
                         :action => 'destroy_membership',
                         :id => @group,
                         :membership_id => membership },
-               :method => :post },
-            :class => 'icon icon-del' ) %>
+            { :remote => true,
+              :method => :post ,
+              :class => 'icon icon-del' }
+             ) %>
   </td>
   </tr>
 <% end; reset_cycle %>

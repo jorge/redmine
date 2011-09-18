@@ -10,11 +10,12 @@
       <tr id="user-<%= user.id %>" class="<%= cycle 'odd', 'even' %>">
         <td class="user"><%= link_to_user user %></td>
         <td class="buttons">
-            <%= link_to_remote(
+            <%= link_to(
                   l(:button_delete),
-                  { :url => group_user_path(@group, :user_id => user),
-                    :method => :delete },
-                  :class => 'icon icon-del'
+                  group_user_path(@group, :user_id => user),
+                  { :remote => true,
+                    :method => :delete,
+                    :class => 'icon icon-del' }
                 ) %>
         </td>
       </tr>

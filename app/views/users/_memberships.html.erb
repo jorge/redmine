@@ -37,11 +37,12 @@
                            "$('member-#{membership.id}-roles').hide(); $('member-#{membership.id}-roles-form').show(); return false;",
                            :class => 'icon icon-edit'
           %>
-      <%= link_to_remote(
+      <%= link_to(
             l(:button_delete),
-            { :url => user_membership_path(@user, membership),
-              :method => :delete },
-            :class => 'icon icon-del'
+            user_membership_path(@user, membership),
+            { :remote => true,
+              :method => :delete,
+              :class => 'icon icon-del' }
           ) if membership.deletable? %>
   </td>
       <%= call_hook(:view_users_memberships_table_row, :user => @user, :membership => membership, :roles => roles, :projects => projects )%>

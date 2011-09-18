@@ -37,13 +37,16 @@
       <%= link_to_function l(:button_edit),
                            "$('member-#{member.id}-roles').hide(); $('member-#{member.id}-roles-form').show(); return false;",
                            :class => 'icon icon-edit' %>
-      <%= link_to_remote(
+      <%= link_to(
             l(:button_delete),
-            { :url => membership_path(member),
+            membership_path(member),
+              { 
+              :remote => true,
               :method => :delete,
-              :confirm => (!User.current.admin? && member.include?(User.current) ? l(:text_own_membership_delete_confirmation) : nil) },
+              :confirm => (!User.current.admin? && member.include?(User.current) ? l(:text_own_membership_delete_confirmation) : nil) ,
             :title => l(:button_delete),
             :class => 'icon icon-del'
+             }
           ) if member.deletable? %>
   </td>
   <%= call_hook(:view_projects_settings_members_table_row, { :project => @project, :member => member}) %>

@@ -262,7 +262,7 @@ class Version < ActiveRecord::Base
 
         done = fixed_issues.sum("COALESCE(estimated_hours, #{estimated_average}) * #{ratio}",
                                   :joins => :status,
-                                  :conditions => ["#{IssueStatus.table_name}.is_closed = ?", !open]).to_f
+                                  :conditions => ["is_closed = ?", !open]).to_f
         progress = done / (estimated_average * issues_count)
       end
       progress

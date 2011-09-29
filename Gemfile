@@ -24,6 +24,7 @@ gem "ruby-prof"
 gem "prototype-rails"
 
 gem 'therubyracer', :platforms => [:mri_18, :mri_19]
+gem 'rails_autolink'
 
 # Gems used only for assets and not required
 # in production environments by default.

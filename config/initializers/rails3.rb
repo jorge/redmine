@@ -28,3 +28,16 @@ class HTML::Document
     old_initialize(doc.to_s, *args)
   end
 end
+
+# http://www.rabbitcreative.com/2010/09/20/rails-3-still-fucking-up-field_with_errors/
+ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
+  if defined?(Rails) && Rails::VERSION::MAJOR >= 3
+    if Rails::VERSION::MINOR == 0
+      include ActionView::Helpers::RawOutputHelper
+      raw %(<span class="field_with_errors">#{html_tag}</span>)
+    else
+      include ActionView::Helpers::OutputSafetyHelper
+      safe_join ['<span class="field_with_errors">'.html_safe, html_tag, '</span>'.html_safe]
+    end
+  end
+end

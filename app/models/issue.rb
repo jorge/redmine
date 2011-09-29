@@ -66,12 +66,12 @@ class Issue < ActiveRecord::Base
 
   scope :open, lambda {|*args|
     is_closed = args.size > 0 ? !args.first : false
-    {:conditions => ["#{IssueStatus.table_name}.is_closed = ?", is_closed], :include => :status}
+    {:conditions => ["#{IssueStatus.table_name}.is_closed = ?", is_closed], :joins => :status}
   }
 
   scope :recently_updated, :order => "#{Issue.table_name}.updated_on DESC"
   scope :with_limit, lambda { |limit| { :limit => limit} }
-  scope :on_active_project, :include => [:status, :project, :tracker],
+  scope :on_active_project, :joins => [:status, :project, :tracker],
                             :conditions => ["#{Project.table_name}.status=#{Project::STATUS_ACTIVE}"]
 
   before_create :default_assign
@@ -564,6 +564,7 @@ class Issue < ActiveRecord::Base
   def total_spent_hours
     @total_spent_hours ||= self_and_descendants.sum("#{TimeEntry.table_name}.hours",
       :joins => "LEFT JOIN #{TimeEntry.table_name} ON #{TimeEntry.table_name}.issue_id = #{Issue.table_name}.id").to_f || 0.0
+    # @total_spent_hours ||= self_and_descendants.sum("#{TimeEntry.table_name}.hours", :joins => :time_entries).to_f || 0.0
   end
 
   def relations

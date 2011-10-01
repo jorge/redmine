@@ -93,6 +93,13 @@ end
 
 group :development do
   gem "rdoc", ">= 2.4.2"
+  # gem 'thin'
+  # gem 'autotest'
+  # gem 'autotest-growl'
+  # gem 'autotest-fsevent'
+  # gem 'mynyml-redgreen'
+  # gem 'rails-dev-tweaks', '~> 0.5.1'
+  gem 'rails-dev-tweaks'
 end
 
 group :test do

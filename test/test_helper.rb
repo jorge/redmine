@@ -182,7 +182,7 @@ class ActiveSupport::TestCase
   end
 
   def mail_body(mail)
-    mail.body
+    mail.body.encoded
   end
 
   # Shoulda macros

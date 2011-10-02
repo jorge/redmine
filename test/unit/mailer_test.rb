@@ -165,15 +165,15 @@ class MailerTest < ActiveSupport::TestCase
     Mailer.issue_add(issue).deliver
     mail = last_email
     assert_not_nil mail
-    assert_equal 'OOF', mail.header_string('X-Auto-Response-Suppress')
-    assert_equal 'auto-generated', mail.header_string('Auto-Submitted')
+    assert_equal 'OOF', mail.header['X-Auto-Response-Suppress'].to_s
+    assert_equal 'auto-generated', mail.header['Auto-Submitted'].to_s
   end
 
   def test_email_headers_should_include_sender
     issue = Issue.find(1)
     Mailer.issue_add(issue).deliver
     mail = last_email
-    assert_equal issue.author.login, mail.header_string('X-Redmine-Sender')
+    assert_equal issue.author.login, mail.header['X-Redmine-Sender'].to_s
   end
 
   def test_plain_text_mail
@@ -181,7 +181,7 @@ class MailerTest < ActiveSupport::TestCase
     journal = Journal.find(2)
     Mailer.issue_edit(journal).deliver
     mail = last_email
-    assert_equal "text/plain", mail.content_type
+    assert_equal "text/plain; charset=UTF-8", mail.content_type
     assert_equal 0, mail.parts.size
     assert !mail.encoded.include?('href')
   end
@@ -200,7 +200,9 @@ class MailerTest < ActiveSupport::TestCase
       Mailer.test_email(User.find(1)).deliver
     end
     mail = last_email
-    assert_equal 'redmine@example.net', mail.from_addrs.first.address
+    from = Mail::Address.new(mail.header[:from].to_s)
+    assert_equal 'redmine@example.net', from.address
+    assert_equal nil, from.name
   end
 
   def test_from_header_with_phrase
@@ -208,8 +210,9 @@ class MailerTest < ActiveSupport::TestCase
       Mailer.test_email(User.find(1)).deliver
     end
     mail = last_email
-    assert_equal 'redmine@example.net', mail.from_addrs.first.address
-    assert_equal 'Redmine app', mail.from_addrs.first.name
+    from = Mail::Address.new(mail.header[:from].to_s)
+    assert_equal 'redmine@example.net', from.address
+    assert_equal 'Redmine app', from.name
   end
 
   def test_should_not_send_email_without_recipient
@@ -237,7 +240,7 @@ class MailerTest < ActiveSupport::TestCase
     issue = Issue.find(1)
     Mailer.issue_add(issue).deliver
     mail = last_email
-    assert_equal Mailer.message_id_for(issue), mail.message_id
+    assert_equal Mailer.message_id_for(issue), "<" + mail.message_id + ">"
     assert_nil mail.references
   end
 
@@ -245,8 +248,8 @@ class MailerTest < ActiveSupport::TestCase
     journal = Journal.find(1)
     Mailer.issue_edit(journal).deliver
     mail = last_email
-    assert_equal Mailer.message_id_for(journal), mail.message_id
-    assert_equal Mailer.message_id_for(journal.issue), mail.references.first.to_s
+    assert_equal Mailer.message_id_for(journal), "<" + mail.message_id + ">"
+    assert_equal Mailer.message_id_for(journal.issue), "<" + mail.references + ">"
     assert_select_email do
       # link to the update
       assert_select "a[href=?]",
@@ -258,7 +261,7 @@ class MailerTest < ActiveSupport::TestCase
     message = Message.find(1)
     Mailer.message_posted(message).deliver
     mail = last_email
-    assert_equal Mailer.message_id_for(message), mail.message_id
+    assert_equal Mailer.message_id_for(message), "<" + mail.message_id + ">"
     assert_nil mail.references
     assert_select_email do
       # link to the message
@@ -272,8 +275,8 @@ class MailerTest < ActiveSupport::TestCase
     message = Message.find(3)
     Mailer.message_posted(message).deliver
     mail = last_email
-    assert_equal Mailer.message_id_for(message), mail.message_id
-    assert_equal Mailer.message_id_for(message.parent), mail.references.first.to_s
+    assert_equal Mailer.message_id_for(message), "<" + mail.message_id + ">"
+    assert_equal Mailer.message_id_for(message.parent), "<" + mail.references + ">"
     assert_select_email do
       # link to the reply
       assert_select "a[href=?]",

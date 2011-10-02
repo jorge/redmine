@@ -135,8 +135,8 @@ class MailerTest < ActiveSupport::TestCase
     Mailer.issue_add(issue).deliver
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
-    assert_equal 'OOF', mail.header_string('X-Auto-Response-Suppress')
-    assert_equal 'auto-generated', mail.header_string('Auto-Submitted')
+    assert_equal 'OOF', mail.headers['X-Auto-Response-Suppress']
+    assert_equal 'auto-generated', mail.headers['Auto-Submitted']
   end
 
   def test_email_headers_should_include_sender
@@ -152,7 +152,7 @@ class MailerTest < ActiveSupport::TestCase
     journal = Journal.find(2)
     Mailer.issue_edit(journal).deliver
     mail = ActionMailer::Base.deliveries.last
-    assert_equal "text/plain", mail.content_type
+    assert_equal "text/plain; charset=UTF-8", mail.content_type
     assert_equal 0, mail.parts.size
     assert !mail.encoded.include?('href')
   end
@@ -172,7 +172,7 @@ class MailerTest < ActiveSupport::TestCase
     end
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
-    assert_equal 'redmine@example.net', mail.from_addrs.first.address
+    assert_equal 'redmine@example.net', mail.from_addrs.first
   end
 
   def test_from_header_with_phrase
@@ -181,8 +181,8 @@ class MailerTest < ActiveSupport::TestCase
     end
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
-    assert_equal 'redmine@example.net', mail.from_addrs.first.address
-    assert_equal 'Redmine app', mail.from_addrs.first.name
+    assert_equal 'redmine@example.net', mail.from_addrs.first
+    assert_equal 'Redmine app', mail.from_addrs.first
   end
 
   def test_should_not_send_email_without_recipient
@@ -211,7 +211,7 @@ class MailerTest < ActiveSupport::TestCase
     Mailer.issue_add(issue).deliver
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
-    assert_equal Mailer.message_id_for(issue), mail.message_id
+    assert_equal Mailer.message_id_for(issue), "<" + mail.message_id + ">"
     assert_nil mail.references
   end
 
@@ -220,8 +220,8 @@ class MailerTest < ActiveSupport::TestCase
     Mailer.issue_edit(journal).deliver
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
-    assert_equal Mailer.message_id_for(journal), mail.message_id
-    assert_equal Mailer.message_id_for(journal.issue), mail.references.first.to_s
+    assert_equal Mailer.message_id_for(journal), "<" + mail.message_id + ">"
+    assert_equal Mailer.message_id_for(journal.issue), "<" + mail.references + ">"
     assert_select_email do
       # link to the update
       assert_select "a[href=?]",
@@ -234,7 +234,7 @@ class MailerTest < ActiveSupport::TestCase
     Mailer.message_posted(message).deliver
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
-    assert_equal Mailer.message_id_for(message), mail.message_id
+    assert_equal Mailer.message_id_for(message), "<" + mail.message_id + ">"
     assert_nil mail.references
     assert_select_email do
       # link to the message
@@ -249,8 +249,8 @@ class MailerTest < ActiveSupport::TestCase
     Mailer.message_posted(message).deliver
     mail = ActionMailer::Base.deliveries.last
     assert_not_nil mail
-    assert_equal Mailer.message_id_for(message), mail.message_id
-    assert_equal Mailer.message_id_for(message.parent), mail.references.first.to_s
+    assert_equal Mailer.message_id_for(message), "<" + mail.message_id + ">"
+    assert_equal Mailer.message_id_for(message.parent), "<" + mail.references + ">"
     assert_select_email do
       # link to the reply
       assert_select "a[href=?]",

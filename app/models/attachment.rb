@@ -75,8 +75,12 @@ class Attachment < ActiveRecord::Base
   def file=(incoming_file)
     unless incoming_file.nil?
       @temp_file = incoming_file
-      if @temp_file.size > 0
-        if @temp_file.respond_to?(:original_filename)
+      temp_file_size = @temp_file.respond_to?(:decoded) ? 
+                          @temp_file.decoded.length : @temp_file.size
+      if temp_file_size > 0
+        if @temp_file.respond_to?(:decoded)
+          self.filename = @temp_file.filename
+        elsif @temp_file.respond_to?(:original_filename)
           self.filename = @temp_file.original_filename
         end
         if @temp_file.respond_to?(:content_type)
@@ -85,7 +89,7 @@ class Attachment < ActiveRecord::Base
         if content_type.blank? && filename.present?
           self.content_type = Redmine::MimeType.of(filename)
         end
-        self.filesize = @temp_file.size
+        self.filesize = temp_file_size
       end
     end
   end
@@ -105,14 +109,21 @@ class Attachment < ActiveRecord::Base
   # Copies the temporary file to its final location
   # and computes its MD5 hash
   def files_to_final_location
-    if @temp_file && (@temp_file.size > 0)
-      logger.info("Saving attachment '#{self.diskfile}' (#{@temp_file.size} bytes)")
+    if @temp_file 
       md5 = Digest::MD5.new
-      File.open(diskfile, "wb") do |f|
-        buffer = ""
-        while (buffer = @temp_file.read(8192))
-          f.write(buffer)
-          md5.update(buffer)
+      if @temp_file.respond_to?(:decoded)
+        logger.info("Saving mail attachment '#{self.diskfile}' (#{self.filesize} bytes)")
+        buffer = @temp_file.decoded
+        md5.update(buffer)
+        File.open(diskfile, "wb") { |f| f.write(buffer) }
+      elsif (@temp_file.size > 0)
+        logger.info("Saving attachment '#{self.diskfile}' (#{@temp_file.size} bytes)")
+        File.open(diskfile, "wb") do |f|
+          buffer = ""
+          while (buffer = @temp_file.read(8192))
+            f.write(buffer)
+            md5.update(buffer)
+          end
         end
       end
       self.digest = md5.hexdigest

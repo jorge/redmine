@@ -163,6 +163,9 @@ class Query < ActiveRecord::Base
     }
   }
 
+  cattr_reader :subject, :created_on, :updated_on, :start_date,
+               :due_date, :estimated_hours, :done_ratio
+
   def initialize(attributes=nil, *args)
     super attributes
     self.filters ||= { 'status_id' => {:operator => "o", :values => [""]} }

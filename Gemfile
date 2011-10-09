@@ -13,8 +13,8 @@ gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :jruby, :mingw_18]
 
 # TODO rails-3.1: review the core changes to awesome_nested_set and decide on actions
 gem 'awesome_nested_set'
-# TODO rails-3.1: review the core changes to open_id_authentication and decide on actions
-gem 'open_id_authentication'
+## TODO rails-3.1: review the core changes to open_id_authentication and decide on actions
+# gem 'open_id_authentication'
 
 # gem 'ruby-prof', :git => 'http://github.com/wycats/ruby-prof.git'
 gem 'ruby-prof'

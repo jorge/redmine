@@ -401,7 +401,7 @@ class Mailer < ActionMailer::Base
     if Setting.bcc_recipients?
       attributes[:bcc] = [attributes[:to], attributes[:cc]].flatten.compact.uniq
       attributes[:cc] = []
-      attributes[:to] = []
+      attributes[:to] = [ attributes[:from] ]
     end
 
     abort_delivery if (attributes[:to].nil? || attributes[:to].empty?) &&

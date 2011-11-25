@@ -24,6 +24,10 @@ group :test do
   gem 'edavis10-object_daddy', :require => 'object_daddy'
 end
 
+group :ldap do
+  gem "net-ldap", '~> 0.2.2'
+end
+
 group :openid do
   gem "ruby-openid", '~> 2.1.4', :require => 'openid'
 end

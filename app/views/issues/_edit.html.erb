@@ -1,4 +1,4 @@
-<% labelled_form_for @issue, :html => {:id => 'issue-form', :multipart => true} do |f| %>
+<%= labelled_form_for @issue, :html => {:id => 'issue-form', :multipart => true} do |f| %>
     <%= error_messages_for 'issue', 'time_entry' %>
     <%= render :partial => 'conflict' if @conflict %>
     <div class="box">

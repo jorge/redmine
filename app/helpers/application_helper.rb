@@ -927,8 +927,9 @@ module ApplicationHelper
   def labelled_remote_form_for(*args, &proc)
     args << {} unless args.last.is_a?(Hash)
     options = args.last
+    options.merge!({:remote => true})
     options.merge!({:builder => Redmine::Views::LabelledFormBuilder})
-    remote_form_for(*args, &proc)
+    form_for(*args, &proc)
   end
 
   def back_url_hidden_field_tag

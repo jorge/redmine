@@ -1,4 +1,4 @@
-<% labelled_fields_for :issue, @issue do |f| %>
+<%= labelled_fields_for :issue, @issue do |f| %>
 <%= call_hook(:view_issues_form_details_top, { :issue => @issue, :form => f }) %>
 
 <% if @issue.safe_attribute? 'is_private' %>

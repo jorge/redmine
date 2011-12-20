@@ -1,6 +1,6 @@
 source :rubygems
 
-gem "rails", "~> 3.1.0"
+gem "rails", "~> 3.2.0"
 gem "rubytree"
 gem "coderay", "~> 1.0.0"
 gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :mingw_18, :jruby]

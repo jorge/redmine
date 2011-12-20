@@ -80,6 +80,10 @@ class ApplicationController < ActionController::Base
     require_dependency "repository/#{scm.underscore}"
   end
 
+  class_attribute :accept_api_auth_actions
+  class_attribute :accept_rss_auth_actions
+  class_attribute :model_object
+
   def user_setup
     # Check the settings cache for each request
     Setting.check_cache
@@ -233,7 +237,7 @@ class ApplicationController < ActionController::Base
   end
 
   def find_model_object
-    model = self.class.read_inheritable_attribute('model_object')
+    model = self.class.model_object
     if model
       @object = model.find(params[:id])
       self.instance_variable_set('@' + controller_name.singularize, @object) if @object
@@ -243,7 +247,7 @@ class ApplicationController < ActionController::Base
   end
 
   def self.model_object(model)
-    write_inheritable_attribute('model_object', model)
+    model_object = model
   end
 
   # Filter for bulk issue operations
@@ -378,9 +382,9 @@ class ApplicationController < ActionController::Base
 
   def self.accept_rss_auth(*actions)
     if actions.any?
-      write_inheritable_attribute('accept_rss_auth_actions', actions)
+      accept_rss_auth_actions = actions
     else
-      read_inheritable_attribute('accept_rss_auth_actions') || []
+      accept_rss_auth_actions || []
     end
   end
 
@@ -390,9 +394,9 @@ class ApplicationController < ActionController::Base
 
   def self.accept_api_auth(*actions)
     if actions.any?
-      write_inheritable_attribute('accept_api_auth_actions', actions)
+      accept_api_auth_actions = actions
     else
-      read_inheritable_attribute('accept_api_auth_actions') || []
+      accept_api_auth_actions || []
     end
   end
 

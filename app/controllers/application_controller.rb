@@ -243,7 +243,7 @@ class ApplicationController < ActionController::Base
   end
 
   def self.model_object(model)
-    write_inheritable_attribute('model_object', model)
+    # write_inheritable_attribute('model_object', model)
   end
 
   # Filter for bulk issue operations
@@ -387,9 +387,9 @@ class ApplicationController < ActionController::Base
 
   def self.accept_rss_auth(*actions)
     if actions.any?
-      write_inheritable_attribute('accept_rss_auth_actions', actions)
+      # write_inheritable_attribute('accept_rss_auth_actions', actions)
     else
-      read_inheritable_attribute('accept_rss_auth_actions') || []
+      # read_inheritable_attribute('accept_rss_auth_actions') || []
     end
   end
 
@@ -399,9 +399,9 @@ class ApplicationController < ActionController::Base
 
   def self.accept_api_auth(*actions)
     if actions.any?
-      write_inheritable_attribute('accept_api_auth_actions', actions)
+      # write_inheritable_attribute('accept_api_auth_actions', actions)
     else
-      read_inheritable_attribute('accept_api_auth_actions') || []
+      # read_inheritable_attribute('accept_api_auth_actions') || []
     end
   end
 

@@ -3,7 +3,7 @@ source :rubygems
 source :rubyforge
 source :gemcutter
 
-gem 'rails', '3.1.3'
+gem 'rails', '3.2.1'
 
 gem 'dynamic_form'
 

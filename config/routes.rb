@@ -295,16 +295,16 @@ Redmine::Application.routes.draw do |map|
   end
 
   # additional routes for having the file name at the end of url
-  map.connect 'attachments/:id/:filename', :controller => 'attachments',
-              :action => 'show', :id => /\d+/, :filename => /.*/,
-              :conditions => {:method => :get}
-  map.connect 'attachments/download/:id/:filename', :controller => 'attachments',
-              :action => 'download', :id => /\d+/, :filename => /.*/,
-              :conditions => {:method => :get}
-  map.connect 'attachments/download/:id', :controller => 'attachments',
-              :action => 'download', :id => /\d+/,
-              :conditions => {:method => :get}
-  map.resources :attachments, :only => [:show, :destroy]
+  scope :controller => 'attachments', :via => :get do
+    match '/attachments/:id/:filename', :action => 'show',
+          :constraints => { :id => /\d+/, :filename => /.*/ }
+    match '/attachments/:id(.:format)', :action => 'show', :id => /\d+/
+    match '/attachments/download/:id/:filename', :action => 'download',
+          :constraints => { :id => /\d+/, :filename => /.*/ }
+    match '/attachments/download/:id', :action => 'download',
+          :constraints => { :id => /\d+/ }
+  end
+  resources :attachments, :only => [:show, :destroy]
 
   map.resources :groups, :member => {:autocomplete_for_user => :get}
   map.group_users 'groups/:id/users', :controller => 'groups',

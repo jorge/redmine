@@ -219,12 +219,9 @@ Redmine::Application.routes.draw do |map|
   map.resources :time_entries, :controller => 'timelog',
                 :collection => {:report => :get, :bulk_edit => :get, :bulk_update => :post}
 
-  map.with_options :controller => 'activities', :action => 'index',
-                   :conditions => {:method => :get} do |activity|
-    activity.connect 'projects/:id/activity'
-    activity.connect 'projects/:id/activity.:format'
-    activity.connect 'activity', :id => nil
-    activity.connect 'activity.:format', :id => nil
+  scope :controller => 'activities', :action => 'index', :via => :get do
+    match '/projects/:id/activity(.:format)'
+    match '/activity(.:format)', :id => nil
   end
 
   map.with_options :controller => 'repositories' do |repositories|

@@ -193,8 +193,7 @@ Redmine::Application.routes.draw do |map|
     }
   end
 
-  map.connect 'news', :controller => 'news', :action => 'index'
-  map.connect 'news.:format', :controller => 'news', :action => 'index'
+  match '/news(.:format)', :controller => 'news', :action => 'index'
 
   map.resources :queries, :except => [:show]
   map.resources :issues,

@@ -104,6 +104,7 @@ class RepositoriesController < ApplicationController
   end
 
   alias_method :browse, :show
+  alias_method :show_root, :show
 
   def changes
     @entry = @repository.entry(@path, @rev)

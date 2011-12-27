@@ -127,8 +127,8 @@ Redmine::AccessControl.map do |map|
 
   map.project_module :repository do |map|
     map.permission :manage_repository, {:repositories => [:new, :create, :edit, :update, :committers, :destroy]}, :require => :member
-    map.permission :browse_repository, :repositories => [:show, :browse, :entry, :annotate, :changes, :diff, :stats, :graph]
-    map.permission :view_changesets, :repositories => [:show, :revisions, :revision]
+    map.permission :browse_repository, :repositories => [:show_root, :show, :browse, :entry, :annotate, :changes, :diff, :stats, :graph]
+    map.permission :view_changesets, :repositories => [:show_root, :show, :revisions, :revision]
     map.permission :commit_access, {}
     map.permission :manage_related_issues, {:repositories => [:add_related_issue, :remove_related_issue]}
   end

@@ -125,8 +125,8 @@ Redmine::AccessControl.map do |map|
 
   map.project_module :repository do |map|
     map.permission :manage_repository, {:repositories => [:new, :create, :edit, :update, :committers, :destroy]}, :require => :member
-    map.permission :browse_repository, :repositories => [:show, :browse, :entry, :annotate, :changes, :diff, :stats, :graph]
-    map.permission :view_changesets, :repositories => [:show, :revisions, :revision]
+    map.permission :browse_repository, :repositories => [:show_root, :show, :browse, :entry, :annotate, :changes, :diff, :stats, :graph]
+    map.permission :view_changesets, :repositories => [:show_root, :show, :revisions, :revision]
     map.permission :commit_access, {}
     map.permission :manage_related_issues, {:repositories => [:add_related_issue, :remove_related_issue]}
   end
@@ -205,7 +205,7 @@ Redmine::MenuManager.map :project_menu do |menu|
   menu.push :boards, { :controller => 'boards', :action => 'index', :id => nil }, :param => :project_id,
               :if => Proc.new { |p| p.boards.any? }, :caption => :label_board_plural
   menu.push :files, { :controller => 'files', :action => 'index' }, :caption => :label_file_plural, :param => :project_id
-  menu.push :repository, { :controller => 'repositories', :action => 'show' },
+  menu.push :repository, { :controller => 'repositories', :action => 'show_root' },
               :if => Proc.new { |p| p.repository && !p.repository.new_record? }
   menu.push :settings, { :controller => 'projects', :action => 'settings' }, :last => true
 end

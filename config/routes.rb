@@ -249,82 +249,88 @@ Redmine::Application.routes.draw do |map|
     match '/activity(.:format)', :id => nil
   end
 
-  map.with_options :controller => 'repositories' do |repositories|
-    repositories.with_options :conditions => {:method => :get} do |repository_views|
-      repository_views.connect 'projects/:id/repository',
-                               :action => 'show'
+  scope :controller => 'repositories' do
+    scope :via => :get do
+      match '/projects/:id/repository/:repository_id/graph',
+            :action => 'graph'
+      match '/projects/:id/repository/:repository_id/statistics',
+            :action => 'stats'
 
-      repository_views.connect 'projects/:id/repository/:repository_id/statistics',
-                               :action => 'stats'
-      repository_views.connect 'projects/:id/repository/:repository_id/graph',
-                               :action => 'graph'
+      match '/projects/:id/repository/graph',
+            :action => 'graph'
+      match '/projects/:id/repository/statistics',
+            :action => 'stats'
 
-      repository_views.connect 'projects/:id/repository/statistics',
-                               :action => 'stats'
-      repository_views.connect 'projects/:id/repository/graph',
-                               :action => 'graph'
+      match '/projects/:id/repository/:repository_id/revisions(.:format)',
+             :action => 'revisions'
+      match '/projects/:id/repository/:repository_id/revisions/:rev',
+             :action => 'revision'
+      match '/projects/:id/repository/:repository_id/revisions/:rev/issues',
+            :action => 'add_related_issue', :via => :post
+      match '/projects/:id/repository/:repository_id/revisions/:rev/issues/:issue_id',
+            :action => 'remove_related_issue', :via => :delete
 
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions',
-                               :action => 'revisions'
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions.:format',
-                               :action => 'revisions'
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions/:rev',
-                               :action => 'revision'
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions/:rev/issues',
-                                :action => 'add_related_issue', :conditions => {:method => :post}
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions/:rev/issues/:issue_id',
-                                :action => 'remove_related_issue', :conditions => {:method => :delete}
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions/:rev/diff',
-                               :action => 'diff'
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions/:rev/diff.:format',
-                               :action => 'diff'
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions/:rev/raw/*path',
-                               :action => 'entry', :format => 'raw'
-      repository_views.connect 'projects/:id/repository/:repository_id/revisions/:rev/:action/*path',
-                               :requirements => { 
-                                   :action => /(browse|show|entry|changes|annotate|diff)/,
-                                   :rev    => /[a-z0-9\.\-_]+/
-                                 }
-      repository_views.connect 'projects/:id/repository/:repository_id/raw/*path',
-                               :action => 'entry', :format => 'raw'
-      repository_views.connect 'projects/:id/repository/:repository_id/:action/*path',
-                               :requirements => { :action => /(browse|entry|changes|annotate|diff)/ }
-      repository_views.connect 'projects/:id/repository/:repository_id/show/*path',
-                               :requirements => { :path => /.+/ }
+      match '/projects/:id/repository/:repository_id/revisions/:rev/diff(.:format)(/*path)',
+             :constraints => { :rev => /[a-z0-9\.\-_]+/ },
+             :action => 'diff'
+      match '/projects/:id/repository/:repository_id/revisions/:rev/raw(/*path)',
+             :action => 'entry',
+             :format => 'raw',
+             :constraints => { :rev => /[a-z0-9\.\-_]+/ }
+      match '/projects/:id/repository/:repository_id/revisions/:rev/:action(/*path)',
+            :constraints => { 
+              :action => /(browse|show|entry|changes|annotate|diff)/,
+              :rev    => /[a-z0-9\.\-_]+/
+            }
 
-      repository_views.connect 'projects/:id/repository/revisions',
-                               :action => 'revisions'
-      repository_views.connect 'projects/:id/repository/revisions.:format',
-                               :action => 'revisions'
-      repository_views.connect 'projects/:id/repository/revisions/:rev',
-                               :action => 'revision'
-      repository_views.connect 'projects/:id/repository/revisions/:rev/issues',
-                                :action => 'add_related_issue', :conditions => {:method => :post}
-      repository_views.connect 'projects/:id/repository/revisions/:rev/issues/:issue_id',
-                                :action => 'remove_related_issue', :conditions => {:method => :delete}
-      repository_views.connect 'projects/:id/repository/revisions/:rev/diff',
-                               :action => 'diff'
-      repository_views.connect 'projects/:id/repository/revisions/:rev/diff.:format',
-                               :action => 'diff'
-      repository_views.connect 'projects/:id/repository/revisions/:rev/raw/*path',
-                               :action => 'entry', :format => 'raw'
-      repository_views.connect 'projects/:id/repository/revisions/:rev/:action/*path',
-                               :requirements => { 
-                                   :action => /(browse|show|entry|changes|annotate|diff)/,
-                                   :rev    => /[a-z0-9\.\-_]+/
-                                 }
-      repository_views.connect 'projects/:id/repository/raw/*path',
-                               :action => 'entry', :format => 'raw'
-      repository_views.connect 'projects/:id/repository/:action/*path',
-                               :requirements => { :action => /(browse|show|entry|changes|annotate|diff)/ }
+      match '/projects/:id/repository/:repository_id/raw(/*path)',
+            :action => 'entry', :format => 'raw'
+      match '/projects/:id/repository/:repository_id/:action(/*path)',
+            :constraints => { 
+              :action => /(browse|show|entry|changes|annotate|diff)/
+            }
 
-      repository_views.connect 'projects/:id/repository/:repository_id',
-                               :action => 'show'
+      match '/projects/:id/repository/revisions(.:format)',
+             :action => 'revisions'
+      match '/projects/:id/repository/revisions/:rev',
+             :action => 'revision'
+      match '/projects/:id/repository/revisions/:rev/issues',
+            :action => 'add_related_issue', :via => :post
+      match '/projects/:id/repository/revisions/:rev/issues/:issue_id',
+            :action => 'remove_related_issue', :via => :delete
+      match '/projects/:id/repository/revisions/:rev/diff(.:format)(/*path)',
+             :constraints => { :rev => /[a-z0-9\.\-_]+/ },
+             :action => 'diff'
+      match '/projects/:id/repository/revisions/:rev/raw(/*path)',
+             :action => 'entry',
+             :format => 'raw',
+             :constraints => { :rev => /[a-z0-9\.\-_]+/ }
+      match '/projects/:id/repository/revisions/:rev/:action(/*path)',
+            :constraints => { 
+              :action => /(browse|show|entry|changes|annotate|diff)/,
+              :rev    => /[a-z0-9\.\-_]+/
+            }
+      match '/projects/:id/repository/revisions/:rev/:action(/*path)',
+            :action => 'show',
+            :constraints => { 
+              :path => /.+/
+            }
+
+      match '/projects/:id/repository/raw(/*path)',
+            :action => 'entry', :format => 'raw'
+      match '/projects/:id/repository/:action(/*path)',
+            :constraints => { 
+              :action => /(browse|entry|changes|annotate|diff)/
+            }
+
+      match '/projects/:id/repository/:repository_id',
+             :action => 'show_root'
+      match '/projects/:id/repository',
+             :action => 'show_root'
     end
-
-    repositories.connect 'projects/:id/repository/revision',
-                         :action => 'revision',
-                         :conditions => {:method => [:get, :post]}
+    scope :via => [:get, :post] do
+      match '/projects/:id/repository/revision', :action => 'revision'
+    end
   end
 
   # additional routes for having the file name at the end of url

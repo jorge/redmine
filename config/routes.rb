@@ -135,11 +135,9 @@ Redmine::Application.routes.draw do |map|
               :conditions => {:method => :get}
 
   # TODO: port to be part of the resources route(s)
-  map.with_options :conditions => {:method => :get} do |project_views|
-    project_views.connect 'projects/:id/settings/:tab',
-                          :controller => 'projects', :action => 'settings'
-    project_views.connect 'projects/:project_id/issues/:copy_from/copy',
-                          :controller => 'issues', :action => 'new'
+  scope :via => :get do
+    match '/projects/:id/settings/:tab', :controller => 'projects', :action => 'settings'
+    match '/projects/:project_id/issues/:copy_from/copy', :controller => 'issues', :action => 'new'
   end
 
   scope :controller => 'wiki' do

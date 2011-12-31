@@ -138,6 +138,32 @@ Redmine::Application.routes.draw do |map|
                           :controller => 'issues', :action => 'new'
   end
 
+  scope :controller => 'wiki' do
+    match '/projects/:project_id/wiki/index',
+          :action => 'index', :via => :get
+    match '/projects/:project_id/wiki/date_index',
+          :action => 'date_index', :via => :get
+    match '/projects/:project_id/wiki/export',
+          :action => 'export', :via => :get
+    match '/projects/:project_id/wiki/(:id)',
+          :as => 'wiki_start_page', :action => 'show', :via => :get
+    match '/projects/:project_id/wiki/:id/diff(/:version(/vs/:version_from))',
+          :as => 'wiki_diff', :action => 'diff'
+    match '/projects/:project_id/wiki/:id/annotate(/:version)',
+          :as => 'wiki_annotate', :action => 'annotate'
+  end
+  scope '/projects/:project_id' do
+    resources :wiki, :except => [:new, :create, :index] do
+      member do
+        match :rename, :via => [:get, :post]
+        get :history
+        match :preview
+        post :protect
+        post :add_attachment
+      end
+    end
+  end
+
   map.resources :projects, :member => {
     :copy => [:get, :post],
     :settings => :get,
@@ -171,22 +197,6 @@ Redmine::Application.routes.draw do |map|
     project.resources :memberships, :shallow => true, :controller => 'members',
                       :only => [:index, :show, :create, :update, :destroy],
                       :collection => {:autocomplete => :get}
-
-    project.wiki_start_page 'wiki', :controller => 'wiki', :action => 'show', :conditions => {:method => :get}
-    project.wiki_index 'wiki/index', :controller => 'wiki', :action => 'index', :conditions => {:method => :get}
-    project.wiki_diff 'wiki/:id/diff/:version', :controller => 'wiki', :action => 'diff', :version => nil
-    project.wiki_diff 'wiki/:id/diff/:version/vs/:version_from', :controller => 'wiki', :action => 'diff'
-    project.wiki_annotate 'wiki/:id/annotate/:version', :controller => 'wiki', :action => 'annotate'
-    project.resources :wiki, :except => [:new, :create], :member => {
-      :rename => [:get, :post],
-      :history => :get,
-      :preview => :any,
-      :protect => :post,
-      :add_attachment => :post
-    }, :collection => {
-      :export => :get,
-      :date_index => :get
-    }
   end
 
   match '/news(.:format)', :controller => 'news', :action => 'index'

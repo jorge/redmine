@@ -230,9 +230,9 @@ Redmine::Application.routes.draw do |map|
   match '/issues', :controller => 'issues', :action => 'destroy',
         :via => :delete
 
-  map.connect '/time_entries/destroy',
-              :controller => 'timelog', :action => 'destroy',
-              :conditions => { :method => :delete }
+  # map.connect '/time_entries/destroy',
+  #             :controller => 'timelog', :action => 'destroy',
+  #             :conditions => { :method => :delete }
   match '/time_entries/context_menu', :as => 'time_entries_context_menu',
         :controller => 'context_menus', :action => 'time_entries'
 

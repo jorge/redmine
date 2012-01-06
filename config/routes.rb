@@ -8,16 +8,13 @@ Redmine::Application.routes.draw do |map|
 
   map.home '', :controller => 'welcome', :conditions => {:method => :get}
 
-  map.signin 'login', :controller => 'account', :action => 'login',
-             :conditions => {:method => [:get, :post]}
-  map.signout 'logout', :controller => 'account', :action => 'logout',
-              :conditions => {:method => :get}
-  map.connect 'account/register', :controller => 'account', :action => 'register',
-              :conditions => {:method => [:get, :post]}
-  map.connect 'account/lost_password', :controller => 'account', :action => 'lost_password',
-              :conditions => {:method => [:get, :post]}
-  map.connect 'account/activate', :controller => 'account', :action => 'activate',
-              :conditions => {:method => :get}
+  scope :controller => 'account' do
+    match '/login', :action => 'login', :as => 'signin', :via => [:get, :post]
+    match '/logout', :action => 'logout', :as => 'signout', :via => :get
+    match '/account/register', :action => 'register', :via => [:get, :post]
+    match '/account/lost_password', :action => 'lost_password', :via => [:get, :post]
+    match '/account/activate', :action => 'activate', :via => :get
+  end
 
   map.connect 'projects/:id/wiki', :controller => 'wikis',
               :action => 'edit', :conditions => {:method => :post}

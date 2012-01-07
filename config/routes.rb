@@ -63,9 +63,9 @@ Redmine::Application.routes.draw do |map|
     match '/issues/gantt(.:format)'
   end
 
-  map.with_options :controller => 'calendars', :action => 'show' do |calendars_routes|
-    calendars_routes.connect '/projects/:project_id/issues/calendar'
-    calendars_routes.connect '/issues/calendar'
+  scope :controller => 'calendars', :action => 'show' do
+    match '/projects/:project_id/issues/calendar'
+    match '/issues/calendar'
   end
 
   map.with_options :controller => 'reports', :conditions => {:method => :get} do |reports|

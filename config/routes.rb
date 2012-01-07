@@ -38,13 +38,13 @@ Redmine::Application.routes.draw do |map|
   end
 
   # Misc issue routes. TODO: move into resources
-  map.auto_complete_issues '/issues/auto_complete', :controller => 'auto_completes',
-                           :action => 'issues', :conditions => { :method => :get }
+  match '/issues/auto_complete', :controller => 'auto_completes',
+        :action => 'issues', :as => 'auto_complete_issues', :via => :get
   # TODO: would look nicer as /issues/:id/preview
-  map.preview_issue '/issues/preview/:id', :controller => 'previews',
-                    :action => 'issue'
-  map.issues_context_menu '/issues/context_menu',
-                          :controller => 'context_menus', :action => 'issues'
+  match '/issues/preview/:id', :controller => 'previews',
+        :action => 'issue', :as => 'preview_issue'
+  match '/issues/context_menu', :controller => 'context_menus',
+        :action => 'issues', :as => 'issues_context_menu'
 
   map.issue_changes '/issues/changes', :controller => 'journals', :action => 'index'
   map.quoted_issue '/issues/:id/quoted', :controller => 'journals', :action => 'new',

@@ -46,14 +46,15 @@ Redmine::Application.routes.draw do |map|
   match '/issues/context_menu', :controller => 'context_menus',
         :action => 'issues', :as => 'issues_context_menu'
 
-  map.issue_changes '/issues/changes', :controller => 'journals', :action => 'index'
-  map.quoted_issue '/issues/:id/quoted', :controller => 'journals', :action => 'new',
-                   :id => /\d+/, :conditions => { :method => :post }
-
-  map.connect '/journals/diff/:id', :controller => 'journals', :action => 'diff',
-              :id => /\d+/, :conditions => { :method => :get }
-  map.connect '/journals/edit/:id', :controller => 'journals', :action => 'edit',
-              :id => /\d+/, :conditions => { :method => [:get, :post] }
+  scope :controller => 'journals' do
+    match '/issues/changes', :action => 'index', :as => 'issue_changes'
+    match '/issues/:id/quoted', :action => 'new', :as => 'quoted_issue',
+          :id => /\d+/, :via => :post
+    match '/journals/diff/:id', :action => 'diff',
+          :id => /\d+/, :via => :get
+    match '/journals/edit/:id', :action => 'edit',
+          :id => /\d+/, :via => [:get, :post]
+  end
 
   scope :controller => 'gantts', :action => 'show' do
     match '/projects/:project_id/issues/gantt(.:format)'

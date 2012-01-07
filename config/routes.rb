@@ -16,10 +16,10 @@ Redmine::Application.routes.draw do |map|
     match '/account/activate', :action => 'activate', :via => :get
   end
 
-  map.connect 'projects/:id/wiki', :controller => 'wikis',
-              :action => 'edit', :conditions => {:method => :post}
-  map.connect 'projects/:id/wiki/destroy', :controller => 'wikis',
-              :action => 'destroy', :conditions => {:method => [:get, :post]}
+  scope :controller => 'wikis' do
+    match '/projects/:id/wiki', :action => 'edit', :via => :post
+    match '/projects/:id/wiki/destroy', :action => 'destroy', :via => [:get, :post]
+  end
 
   map.with_options :controller => 'messages' do |messages_routes|
     messages_routes.with_options :conditions => {:method => :get} do |messages_views|

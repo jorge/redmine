@@ -392,8 +392,8 @@ Redmine::Application.routes.draw do |map|
 
   map.connect 'uploads.:format', :controller => 'attachments', :action => 'upload', :conditions => {:method => :post}
 
-  map.connect 'robots.txt', :controller => 'welcome',
-              :action => 'robots', :conditions => {:method => :get}
+  match '/robots.txt', :controller => 'welcome',
+        :action => 'robots', :via => :get
 
   # Used for OpenID
   map.root :controller => 'account', :action => 'login'

@@ -188,17 +188,24 @@ Redmine::Application.routes.draw do |map|
   match '/news(.:format)', :controller => 'news', :action => 'index'
 
   resources :queries, :except => [:show]
-  map.resources :issues,
-                :collection => {:bulk_edit => [:get, :post], :bulk_update => :post} do |issues|
-    issues.resources :time_entries, :controller => 'timelog',
-                     :collection => {:report => :get}
-    issues.resources :relations, :shallow => true,
-                     :controller => 'issue_relations',
-                     :only => [:index, :show, :create, :destroy]
+  resources :issues do
+    collection do
+      get  'bulk_edit'
+      post 'bulk_edit'
+      post 'bulk_update'
+    end
+    resources :time_entries, :controller => 'timelog' do
+      collection do
+        get 'report'
+      end
+    end
+    resources :relations, :shallow => true,
+              :controller => 'issue_relations',
+              :only => [:index, :show, :create, :destroy]
   end
   # Bulk deletion
-  map.connect '/issues', :controller => 'issues', :action => 'destroy',
-              :conditions => {:method => :delete}
+  match '/issues', :controller => 'issues', :action => 'destroy',
+        :via => :delete
 
   map.connect '/time_entries/destroy',
               :controller => 'timelog', :action => 'destroy',

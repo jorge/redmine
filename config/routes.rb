@@ -333,7 +333,12 @@ Redmine::Application.routes.draw do |map|
     end
   end
   resources :custom_fields, :except => :show
-  map.resources :roles, :except => :show, :collection => {:permissions => [:get, :post]}
+  resources :roles, :except => :show do
+    collection do
+      get  'permissions'
+      post 'permissions'
+    end
+  end
   map.resources :enumerations, :except => :show
 
   map.connect 'search', :controller => 'search', :action => 'index', :conditions => {:method => :get}

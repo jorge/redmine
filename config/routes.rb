@@ -390,12 +390,11 @@ Redmine::Application.routes.draw do |map|
           :constraints => { :id => /\d+/ }
   end
 
-  map.connect 'workflows', :controller => 'workflows',
-              :action => 'index', :conditions => {:method => :get}
-  map.connect 'workflows/edit', :controller => 'workflows',
-              :action => 'edit', :conditions => {:method => [:get, :post]}
-  map.connect 'workflows/copy', :controller => 'workflows',
-              :action => 'copy', :conditions => {:method => [:get, :post]}
+  scope :controller => 'workflows' do
+    match '/workflows', :action => 'index', :via => :get
+    match '/workflows/edit', :action => 'edit', :via => [:get, :post]
+    match '/workflows/copy', :action => 'copy', :via => [:get, :post]
+  end
 
   map.connect 'settings', :controller => 'settings',
               :action => 'index', :conditions => {:method => :get}

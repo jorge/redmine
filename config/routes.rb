@@ -331,7 +331,7 @@ Redmine::Application.routes.draw do |map|
           :constraints => { :id => /\d+/ }, :via => :post
   end
 
-  map.resources :trackers, :except => :show
+  resources :trackers, :except => :show
   map.resources :issue_statuses, :except => :show, :collection => {:update_issue_done_ratio => :post}
   map.resources :custom_fields, :except => :show
   map.resources :roles, :except => :show, :collection => {:permissions => [:get, :post]}

@@ -349,8 +349,8 @@ Redmine::Application.routes.draw do |map|
   match '/search', :controller => 'search',
         :action => 'index', :via => :get
 
-  map.connect 'mail_handler', :controller => 'mail_handler',
-              :action => 'index', :conditions => {:method => :post}
+  match '/mail_handler', :controller => 'mail_handler',
+        :action => 'index', :via => :post
 
   map.connect 'admin', :controller => 'admin', :action => 'index',
               :conditions => {:method => :get}

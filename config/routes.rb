@@ -337,7 +337,7 @@ Redmine::Application.routes.draw do |map|
       post 'update_issue_done_ratio'
     end
   end
-  map.resources :custom_fields, :except => :show
+  resources :custom_fields, :except => :show
   map.resources :roles, :except => :show, :collection => {:permissions => [:get, :post]}
   map.resources :enumerations, :except => :show
 

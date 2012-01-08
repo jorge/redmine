@@ -378,16 +378,12 @@ Redmine::Application.routes.draw do |map|
   map.connect 'settings/plugin/:id', :controller => 'settings',
               :action => 'plugin', :conditions => {:method => [:get, :post]}
 
-  map.with_options :controller => 'sys' do |sys|
-    sys.connect 'sys/projects.:format',
-                :action => 'projects',
-                :conditions => {:method => :get}
-    sys.connect 'sys/projects/:id/repository.:format',
-                :action => 'create_project_repository',
-                :conditions => {:method => :post}
-    sys.connect 'sys/fetch_changesets',
-                :action => 'fetch_changesets',
-                :conditions => {:method => :get}
+  scope :controller => 'sys' do
+    match '/sys/projects(.:format)', :action => 'projects', :via => :get
+    match '/sys/projects/:id/repository(.:format)',
+          :action => 'create_project_repository', :via => :post
+    match '/sys/fetch_changesets', :action => 'fetch_changesets',
+          :via => :get
   end
 
   map.connect 'uploads.:format', :controller => 'attachments', :action => 'upload', :conditions => {:method => :post}

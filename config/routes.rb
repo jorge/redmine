@@ -376,20 +376,19 @@ Redmine::Application.routes.draw do |map|
           :constraints => { :id => /\d+/ }
   end
 
-  map.connect 'ldap_auth_sources', :controller => 'ldap_auth_sources',
-              :action => 'index', :conditions => {:method => :get}
-  map.connect 'ldap_auth_sources/new', :controller => 'ldap_auth_sources',
-              :action => 'new', :conditions => {:method => :get}
-  map.connect 'ldap_auth_sources/create', :controller => 'ldap_auth_sources',
-              :action => 'create', :conditions => {:method => :post}
-  map.connect 'ldap_auth_sources/destroy/:id', :controller => 'ldap_auth_sources',
-              :action => 'destroy', :id => /\d+/, :conditions => {:method => :post}
-  map.connect 'ldap_auth_sources/test_connection/:id', :controller => 'ldap_auth_sources',
-              :action => 'test_connection', :conditions => {:method => :get}
-  map.connect 'ldap_auth_sources/edit/:id', :controller => 'ldap_auth_sources',
-              :action => 'edit', :id => /\d+/, :conditions => {:method => :get}
-  map.connect 'ldap_auth_sources/update/:id', :controller => 'ldap_auth_sources',
-              :action => 'update', :id => /\d+/, :conditions => {:method => :post}
+  scope :controller => 'ldap_auth_sources' do
+    match '/ldap_auth_sources', :action => 'index', :via => :get
+    match '/ldap_auth_sources/new', :action => 'new', :via => :get
+    match '/ldap_auth_sources/create', :action => 'create', :via => :post
+    match '/ldap_auth_sources/destroy/:id', :action => 'destroy', :via => :post,
+          :constraints => { :id => /\d+/ }
+    match '/ldap_auth_sources/test_connection/:id', :action => 'test_connection',
+           :via => :get
+    match '/ldap_auth_sources/edit/:id', :action => 'edit', :via => :get,
+          :constraints => { :id => /\d+/ }
+    match '/ldap_auth_sources/update/:id', :action => 'update', :via => :post,
+          :constraints => { :id => /\d+/ }
+  end
 
   map.connect 'workflows', :controller => 'workflows',
               :action => 'index', :conditions => {:method => :get}

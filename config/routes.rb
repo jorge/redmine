@@ -359,20 +359,22 @@ Redmine::Application.routes.draw do |map|
 
   # Used by AuthSourcesControllerTest
   # TODO : refactor *AuthSourcesController to remove these routes
-  map.connect 'auth_sources', :controller => 'auth_sources',
-              :action => 'index', :conditions => {:method => :get}
-  map.connect 'auth_sources/new', :controller => 'auth_sources',
-              :action => 'new', :conditions => {:method => :get}
-  map.connect 'auth_sources/create', :controller => 'auth_sources',
-              :action => 'create', :conditions => {:method => :post}
-  map.connect 'auth_sources/destroy/:id', :controller => 'auth_sources',
-              :action => 'destroy', :id => /\d+/, :conditions => {:method => :post}
-  map.connect 'auth_sources/test_connection/:id', :controller => 'auth_sources',
-              :action => 'test_connection', :conditions => {:method => :get}
-  map.connect 'auth_sources/edit/:id', :controller => 'auth_sources',
-              :action => 'edit', :id => /\d+/, :conditions => {:method => :get}
-  map.connect 'auth_sources/update/:id', :controller => 'auth_sources',
-              :action => 'update', :id => /\d+/, :conditions => {:method => :post}
+  scope :controller => 'auth_sources' do
+    match '/auth_sources', :action => 'index', :via => :get
+    match '/auth_sources/new', :action => 'new', :via => :get
+    match '/auth_sources/create', :action => 'create', :via => :post
+    match '/auth_sources/destroy/:id', :action => 'destroy',
+          :via => :post,
+          :constraints => { :id => /\d+/ }
+    match '/auth_sources/test_connection/:id', :action => 'test_connection',
+          :via => :get
+    match '/auth_sources/edit/:id', :action => 'edit',
+          :via => :get,
+          :constraints => { :id => /\d+/ }
+    match '/auth_sources/update/:id', :action => 'update',
+          :via => :post,
+          :constraints => { :id => /\d+/ }
+  end
 
   map.connect 'ldap_auth_sources', :controller => 'ldap_auth_sources',
               :action => 'index', :conditions => {:method => :get}

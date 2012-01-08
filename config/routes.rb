@@ -311,19 +311,25 @@ Redmine::Application.routes.draw do |map|
   end
   resources :attachments, :only => [:show, :destroy]
 
-  map.resources :groups, :member => {:autocomplete_for_user => :get}
-  map.group_users 'groups/:id/users', :controller => 'groups',
-                  :action => 'add_users', :id => /\d+/,
-                  :conditions => {:method => :post}
-  map.group_user  'groups/:id/users/:user_id', :controller => 'groups',
-                  :action => 'remove_user', :id => /\d+/,
-                  :conditions => {:method => :delete}
-  map.connect 'groups/destroy_membership/:id', :controller => 'groups',
-              :action => 'destroy_membership', :id => /\d+/,
-              :conditions => {:method => :post}
-  map.connect 'groups/edit_membership/:id', :controller => 'groups',
-              :action => 'edit_membership', :id => /\d+/,
-              :conditions => {:method => :post}
+  resources :groups do
+    member do
+      get 'autocomplete_for_user'
+    end
+  end
+  scope :controller => 'groups' do
+    match '/groups/:id/users', :as => 'group_users',
+          :action => 'add_users',
+          :constraints => { :id => /\d+/ }, :via => :post
+    match '/groups/:id/users/:user_id', :as => 'group_user',
+          :action => 'remove_user',
+          :constraints => { :id => /\d+/ }, :via => :delete
+    match '/groups/destroy_membership/:id',
+          :action => 'destroy_membership',
+          :constraints => { :id => /\d+/ }, :via => :post
+    match '/groups/edit_membership/:id',
+          :action => 'edit_membership',
+          :constraints => { :id => /\d+/ }, :via => :post
+  end
 
   map.resources :trackers, :except => :show
   map.resources :issue_statuses, :except => :show, :collection => {:update_issue_done_ratio => :post}

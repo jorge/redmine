@@ -102,10 +102,10 @@ Redmine::Application.routes.draw do |map|
 
   match '/news/preview', :as => 'preview_news',
         :controller => 'previews', :action => 'news'
-  map.connect 'news/:id/comments', :controller => 'comments',
-              :action => 'create', :conditions => {:method => :post}
-  map.connect 'news/:id/comments/:comment_id', :controller => 'comments',
-              :action => 'destroy', :conditions => {:method => :delete}
+  scope :controller => 'comments' do
+    match '/news/:id/comments', :action => 'create', :via => :post
+    match '/news/:id/comments/:comment_id', :action => 'destroy', :via => :delete
+  end
 
   map.connect 'watchers/new', :controller=> 'watchers', :action => 'new',
               :conditions => {:method => :get}

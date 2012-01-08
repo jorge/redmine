@@ -107,20 +107,16 @@ Redmine::Application.routes.draw do |map|
     match '/news/:id/comments/:comment_id', :action => 'destroy', :via => :delete
   end
 
-  map.connect 'watchers/new', :controller=> 'watchers', :action => 'new',
-              :conditions => {:method => :get}
-  map.connect 'watchers', :controller=> 'watchers', :action => 'create',
-              :conditions => {:method => :post}
-  map.connect 'watchers/append', :controller=> 'watchers', :action => 'append',
-              :conditions => {:method => :post}
-  map.connect 'watchers/destroy', :controller=> 'watchers', :action => 'destroy',
-              :conditions => {:method => :post}
-  map.connect 'watchers/watch', :controller=> 'watchers', :action => 'watch',
-              :conditions => {:method => :post}
-  map.connect 'watchers/unwatch', :controller=> 'watchers', :action => 'unwatch',
-              :conditions => {:method => :post}
-  map.connect 'watchers/autocomplete_for_user', :controller=> 'watchers', :action => 'autocomplete_for_user',
-              :conditions => {:method => :get}
+  scope :controller => 'watchers' do
+    match '/watchers/new', :action => 'new', :via => :get
+    match '/watchers', :action => 'create', :via => :post
+    match '/watchers/append', :action => 'append', :via => :post
+    match '/watchers/destroy', :action => 'destroy', :via => :post
+    match '/watchers/watch', :action => 'watch', :via => :post
+    match '/watchers/unwatch', :action => 'unwatch', :via => :post
+    match '/watchers/autocomplete_for_user',
+          :action => 'autocomplete_for_user', :via => :get
+  end
 
   # TODO: port to be part of the resources route(s)
   scope :via => :get do

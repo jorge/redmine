@@ -362,7 +362,11 @@ Redmine::Application.routes.draw do |map|
           :via => :post
   end
 
-  map.resources :auth_sources, :member => {:test_connection => :get}
+  resources :auth_sources do
+    member do
+      get 'test_connection'
+    end
+  end
 
   map.connect 'workflows', :controller => 'workflows',
               :action => 'index', :conditions => {:method => :get}

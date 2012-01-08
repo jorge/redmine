@@ -98,7 +98,8 @@ Redmine::Application.routes.draw do |map|
   # For nice "roadmap" in the url for the index action
   map.connect 'projects/:project_id/roadmap', :controller => 'versions', :action => 'index'
 
-  map.preview_news '/news/preview', :controller => 'previews', :action => 'news'
+  match '/news/preview', :as => 'preview_news',
+        :controller => 'previews', :action => 'news'
   map.connect 'news/:id/comments', :controller => 'comments',
               :action => 'create', :conditions => {:method => :post}
   map.connect 'news/:id/comments/:comment_id', :controller => 'comments',

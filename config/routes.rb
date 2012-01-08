@@ -184,7 +184,7 @@ Redmine::Application.routes.draw do |map|
 
   match '/news(.:format)', :controller => 'news', :action => 'index'
 
-  map.resources :queries, :except => [:show]
+  resources :queries, :except => [:show]
   map.resources :issues,
                 :collection => {:bulk_edit => [:get, :post], :bulk_update => :post} do |issues|
     issues.resources :time_entries, :controller => 'timelog',

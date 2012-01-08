@@ -344,7 +344,7 @@ Redmine::Application.routes.draw do |map|
       post 'permissions'
     end
   end
-  map.resources :enumerations, :except => :show
+  resources :enumerations, :except => :show
 
   map.connect 'search', :controller => 'search', :action => 'index', :conditions => {:method => :get}
 

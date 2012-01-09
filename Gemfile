@@ -25,7 +25,13 @@ group :test do
 
   # cannot install on mingw due to fail installing linecache with native extensions
   platforms :mri_18 do gem 'ruby-debug' end
-  platforms :mri_19 do gem 'ruby-debug19', :require => 'ruby-debug' end
+  platforms :mri_19 do
+    # http://stackoverflow.com/questions/8251349/ruby-threadptr-data-type-error
+    # gem 'ruby-debug19', :require => 'ruby-debug'
+    gem 'linecache19', :git => 'git://github.com/mark-moseley/linecache'
+    gem 'ruby-debug-base19x', '~> 0.11.30.pre4'
+    gem 'ruby-debug19'
+  end
 end
 
 group :ldap do

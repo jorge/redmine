@@ -236,8 +236,13 @@ Redmine::Application.routes.draw do |map|
   match '/time_entries/context_menu', :as => 'time_entries_context_menu',
         :controller => 'context_menus', :action => 'time_entries'
 
-  map.resources :time_entries, :controller => 'timelog',
-                :collection => {:report => :get, :bulk_edit => :get, :bulk_update => :post}
+  resources :time_entries, :controller => 'timelog' do
+    collection do
+      get  'report'
+      get  'bulk_edit'
+      post 'bulk_update'
+    end
+  end
 
   scope :controller => 'activities', :action => 'index', :via => :get do
     match '/projects/:id/activity(.:format)'

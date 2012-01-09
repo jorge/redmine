@@ -150,39 +150,62 @@ Redmine::Application.routes.draw do |map|
     end
   end
 
-  map.resources :projects, :member => {
-    :copy => [:get, :post],
-    :settings => :get,
-    :modules => :post,
-    :archive => :post,
-    :unarchive => :post
-  } do |project|
-    project.resource :enumerations, :controller => 'project_enumerations',
-                     :only => [:update, :destroy]
-    # issue form update
-    project.issue_form 'issues/new', :controller => 'issues',
-                       :action => 'new', :conditions => {:method => [:post, :put]}
-    project.resources :issues, :only => [:index, :new, :create] do |issues|
-      issues.resources :time_entries, :controller => 'timelog',
-                       :collection => {:report => :get}
+  resources :projects do
+    member do
+      get  'copy'
+      post 'copy'
+      get  'settings'
+      post 'modules'
+      post 'archive'
+      post 'unarchive'
     end
-
-    project.resources :files, :only => [:index, :new, :create]
-    project.resources :versions, :shallow => true,
-                      :collection => {:close_completed => :put},
-                      :member => {:status_by => :post}
-    project.resources :news, :shallow => true
-    project.resources :time_entries, :controller => 'timelog',
-                      :collection => {:report => :get}
-    project.resources :queries, :only => [:new, :create]
-    project.resources :issue_categories, :shallow => true
-    project.resources :documents, :shallow => true, :member => {:add_attachment => :post}
-    project.resources :boards
-    project.resources :repositories, :shallow => true, :except => [:index, :show],
-                      :member => {:committers => [:get, :post]}
-    project.resources :memberships, :shallow => true, :controller => 'members',
-                      :only => [:index, :show, :create, :update, :destroy],
-                      :collection => {:autocomplete => :get}
+    resource :enumerations, :controller => 'project_enumerations',
+             :only => [:update, :destroy]
+    # issue form update
+    match 'issues/new', :as => 'issue_form', :controller => 'issues',
+          :action => 'new', :via => [:post, :put]
+    resources :issues, :only => [:index, :new, :create] do
+      resources :time_entries, :controller => 'timelog' do
+        collection do
+          get 'report'
+        end
+      end
+    end
+    resources :files, :only => [:index, :new, :create]
+    resources :versions, :shallow => true do
+      collection do
+        put 'close_completed'
+      end
+      member do
+        post 'status_by'
+      end
+    end
+    resources :news, :shallow => true
+    resources :time_entries, :controller => 'timelog' do
+      collection do
+        get 'report'
+      end
+    end
+    resources :queries, :only => [:new, :create]
+    resources :issue_categories, :shallow => true
+    resources :documents, :shallow => true do
+      member do
+        post 'add_attachment'
+      end
+    end
+    resources :boards
+    resources :repositories, :shallow => true, :except => [:index, :show] do
+      member do
+        get  'committers'
+        post 'committers'
+      end
+    end
+    resources :memberships, :shallow => true, :controller => 'members',
+              :only => [:index, :show, :create, :update, :destroy] do
+      collection do
+        get 'autocomplete'
+      end
+    end
   end
 
   match '/news(.:format)', :controller => 'news', :action => 'index'

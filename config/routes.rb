@@ -233,8 +233,8 @@ Redmine::Application.routes.draw do |map|
   map.connect '/time_entries/destroy',
               :controller => 'timelog', :action => 'destroy',
               :conditions => { :method => :delete }
-  map.time_entries_context_menu '/time_entries/context_menu',
-                   :controller => 'context_menus', :action => 'time_entries'
+  match '/time_entries/context_menu', :as => 'time_entries_context_menu',
+        :controller => 'context_menus', :action => 'time_entries'
 
   map.resources :time_entries, :controller => 'timelog',
                 :collection => {:report => :get, :bulk_edit => :get, :bulk_update => :post}

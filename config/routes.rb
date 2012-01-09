@@ -1,4 +1,4 @@
-Redmine::Application.routes.draw do |map|
+Redmine::Application.routes.draw do
   # Add your own custom routes here.
   # The priority is based upon order of creation: first created -> highest priority.
 

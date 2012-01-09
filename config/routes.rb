@@ -6,7 +6,7 @@ Redmine::Application.routes.draw do |map|
   # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
   # Keep in mind you can assign values other than :controller and :action
 
-  map.home '', :controller => 'welcome', :conditions => {:method => :get}
+  match '/', :as => 'home', :controller => 'welcome', :action => 'index', :via => :get
 
   scope :controller => 'account' do
     match '/login', :action => 'login', :as => 'signin', :via => [:get, :post]
@@ -429,5 +429,5 @@ Redmine::Application.routes.draw do |map|
         :action => 'robots', :via => :get
 
   # Used for OpenID
-  map.root :controller => 'account', :action => 'login'
+  root :controller => 'account', :action => 'login'
 end

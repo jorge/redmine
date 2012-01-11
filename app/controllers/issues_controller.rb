@@ -328,6 +328,11 @@ private
 
   def retrieve_previous_and_next_issue_ids
     retrieve_query_from_session
+    # TODO
+    @prev_issue_id = nil
+    @next_issue_id = nil
+    return
+
     if @query
       sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
       sort_update(@query.sortable_columns, 'issues_index_sort')

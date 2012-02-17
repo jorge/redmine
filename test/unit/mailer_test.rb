@@ -533,14 +533,6 @@ class MailerTest < ActiveSupport::TestCase
     assert ActionMailer::Base.perform_deliveries
   end
   
-  def test_tmail_to_header_field_should_not_include_blank_lines
-    mail = TMail::Mail.new
-    mail.to = ["a.user@example.com", "v.user2@example.com", "e.smith@example.com", "info@example.com", "v.pupkin@example.com",
-      "b.user@example.com", "w.user2@example.com", "f.smith@example.com", "info2@example.com", "w.pupkin@example.com"]
-    
-    assert !mail.encoded.strip.split("\r\n").detect(&:blank?), "#{mail.encoded} malformed"
-  end
-
   def test_layout_should_include_the_emails_header
     with_settings :emails_header => "*Header content*" do
       assert Mailer.test_email(User.find(1)).deliver

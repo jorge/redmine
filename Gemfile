@@ -82,7 +82,9 @@ end
 group :test do
   gem "test-unit"
   gem "shoulda", "~> 2.11"
-  gem "edavis10-object_daddy", :require => "object_daddy"
+  gem "object_daddy",
+      :git => "git://github.com/awebneck/object_daddy.git",
+      :branch => "rails-3-2-gem"
   gem "mocha"
 end
 

@@ -258,7 +258,7 @@ class Issue < ActiveRecord::Base
         send "#{attr}=", attrs.delete(attr)
       end
     end
-    send :attributes_without_project_and_tracker_first=, attrs, *args
+    send :attributes_without_project_and_tracker_first=, attrs
   end
   # Do not redefine alias chain on reload (see #4838)
   alias_method_chain(:attributes=, :project_and_tracker_first) unless method_defined?(:attributes_without_project_and_tracker_first=)

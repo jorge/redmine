@@ -418,7 +418,7 @@ class Mailer < ActionMailer::Base
 
     # Log errors when raise_delivery_errors is set to false, Rails does not
     raise_errors = self.class.raise_delivery_errors
-    self.class.raise_delivery_errors = true
+    self.class.raise_delivery_errors = false
     begin
       mail_without_default_settings(attributes) do |format|
         format.text { render(:template => method_name) }

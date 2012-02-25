@@ -416,7 +416,8 @@ Redmine::Application.routes.draw do |map|
           :via => :get
   end
 
-  map.connect 'uploads.:format', :controller => 'attachments', :action => 'upload', :conditions => {:method => :post}
+  match '/uploads(.:format)', :controller => 'attachments',
+        :action => 'upload', :via => :post
 
   match '/robots.txt', :controller => 'welcome',
         :action => 'robots', :via => :get

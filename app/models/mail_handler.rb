@@ -93,7 +93,7 @@ class MailHandler < ActionMailer::Base
 
   private
 
-  MESSAGE_ID_RE = %r{^<redmine\.([a-z0-9_]+)\-(\d+)\.\d+@}
+  MESSAGE_ID_RE = %r{^redmine\.([a-z0-9_]+)\-(\d+)\.\d+@}
   ISSUE_REPLY_SUBJECT_RE = %r{\[[^\]]*#(\d+)\]}
   MESSAGE_REPLY_SUBJECT_RE = %r{\[[^\]]*msg(\d+)\]}
 
@@ -326,14 +326,14 @@ class MailHandler < ActionMailer::Base
     if parts.empty?
       parts << @email
     end
-    plain_text_part = parts.detect {|p| p.content_type == 'text/plain'}
+    plain_text_part = parts.detect {|p| p.content_type =~ %r{^text/plain;}}
     if plain_text_part.nil?
       # no text/plain part found, assuming html-only email
       # strip html tags and remove doctype directive
       @plain_text_body = strip_tags(@email.body.to_s)
       @plain_text_body.gsub! %r{^<!DOCTYPE .*$}, ''
     else
-      @plain_text_body = plain_text_part.body.to_s
+      @plain_text_body = Redmine::CodesetUtil.to_utf8(plain_text_part.body.decoded, plain_text_part.charset)
     end
     @plain_text_body.strip!
     @plain_text_body
@@ -382,9 +382,11 @@ class MailHandler < ActionMailer::Base
   # Creates a User for the +email+ sender
   # Returns the user or nil if it could not be created
   def create_user_from_email
-    addr = email.from_addrs.to_a.first
-    if addr && !addr.spec.blank?
-      user = self.class.new_user_from_attributes(addr.spec, TMail::Unquoter.unquote_and_convert_to(addr.name, 'utf-8'))
+    from = email[:from]
+    fs = []
+    from.each { |f| fs << f }
+    if !fs.first.blank?
+      user = self.class.new_user_from_attributes(fs.first.address, Mail::Encodings.value_decode(fs.first.name))
       if user.save
         user
       else

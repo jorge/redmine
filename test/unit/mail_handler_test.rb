@@ -163,7 +163,7 @@ class MailHandlerTest < ActiveSupport::TestCase
     # Attachment properties
     assert_equal 1, issue.attachments.size
     assert_equal 'Paella.jpg', issue.attachments.first.filename
-    assert_equal 'image/jpeg', issue.attachments.first.content_type
+    assert_equal 'image/jpeg; charset=UTF-8; name=Paella.jpg', issue.attachments.first.content_type
     assert_equal 10790, issue.attachments.first.filesize
   end
 
@@ -599,6 +599,7 @@ class MailHandlerTest < ActiveSupport::TestCase
 
   def submit_email(filename, options={})
     raw = IO.read(File.join(FIXTURES_PATH, filename))
+    raw.force_encoding('ASCII-8BIT') if raw.respond_to?(:force_encoding)
     yield raw if block_given?
     MailHandler.receive(raw, options)
   end

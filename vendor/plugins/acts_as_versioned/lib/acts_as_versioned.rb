@@ -287,6 +287,10 @@ module ActiveRecord #:nodoc:
           base.extend ClassMethods
         end
 
+        def has_inheritance_column?
+          self.class.columns_hash.include?(self.class.inheritance_column)
+        end
+
         # Finds a specific version of this record
         def find_version(version = nil)
           self.class.find_version(id, version)
@@ -377,10 +381,12 @@ module ActiveRecord #:nodoc:
             new_model.send("#{key}=", orig_model.send(key)) if orig_model.has_attribute?(key)
           end
 
-          if orig_model.is_a?(self.class.versioned_class)
-            new_model[new_model.class.inheritance_column] = orig_model[self.class.versioned_inheritance_column]
-          elsif new_model.is_a?(self.class.versioned_class)
-            new_model[self.class.versioned_inheritance_column] = orig_model[orig_model.class.inheritance_column]
+          if self.has_inheritance_column?
+            if orig_model.is_a?(self.class.versioned_class)
+              new_model[new_model.class.inheritance_column] = orig_model[self.class.versioned_inheritance_column]
+            elsif new_model.is_a?(self.class.versioned_class)
+              new_model[self.class.versioned_inheritance_column] = orig_model[orig_model.class.inheritance_column]
+            end
           end
         end
 
@@ -502,16 +508,31 @@ module ActiveRecord #:nodoc:
                 :precision => col.precision
             end
 
+            add_inheritance_column
+
+            if updated_col.nil?
+              self.connection.add_column versioned_table_name, :updated_at, :timestamp
+            end
+          end
+
+          # Rake migration task to add inheritance column
+          def add_inheritance_column
             if type_col = self.columns_hash[inheritance_column]
-              self.connection.add_column versioned_table_name, versioned_inheritance_column, type_col.type, 
+              self.connection.add_column versioned_table_name,
+                versioned_inheritance_column,
+                type_col.type,
                 :limit => type_col.limit, 
                 :default => type_col.default,
                 :scale => type_col.scale,
                 :precision => type_col.precision
             end
+          end
 
-            if updated_col.nil?
-              self.connection.add_column versioned_table_name, :updated_at, :timestamp
+          # Rake migration task to remove inheritance column
+          def remove_inheritance_column
+            if type_col = self.columns_hash[inheritance_column]
+              self.connection.remove_column versioned_table_name,
+                versioned_inheritance_column
             end
           end
 

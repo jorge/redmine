@@ -354,13 +354,13 @@ class Issue < ActiveRecord::Base
     self.send :attributes=, attrs, false
   end
 
-  def done_ratio
-    if Issue.use_status_for_done_ratio? && status && status.default_done_ratio
-      status.default_done_ratio
-    else
-      read_attribute(:done_ratio)
-    end
-  end
+#  def done_ratio
+#    if Issue.use_status_for_done_ratio? && status && status.default_done_ratio
+#      status.default_done_ratio
+#    else
+#      read_attribute(:done_ratio)
+#    end
+#  end
 
   def self.use_status_for_done_ratio?
     Setting.issue_done_ratio == 'issue_status'

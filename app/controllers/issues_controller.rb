@@ -51,7 +51,6 @@ class IssuesController < ApplicationController
   include IssuesHelper
   helper :timelog
   helper :gantt
-  include Redmine::Export::PDF
 
   def index
     retrieve_query

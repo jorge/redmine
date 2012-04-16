@@ -28,7 +28,6 @@ class GanttsController < ApplicationController
   include QueriesHelper
   helper :sort
   include SortHelper
-  include Redmine::Export::PDF
 
   def show
     @gantt = Redmine::Helpers::Gantt.new(params)

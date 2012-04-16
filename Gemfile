@@ -5,7 +5,8 @@ gem "rubytree"
 gem "coderay", "~> 1.0.0"
 gem "fastercsv", "~> 1.5.0", :platforms => [:mri_18, :mingw_18, :jruby]
 gem "tzinfo", "~> 0.3.31"
-
+gem "sqlite3"
+gem "thin"
 gem "prototype_legacy_helper",
     "0.0.0",
     :git => 'git://github.com/willbryant/prototype_legacy_helper.git'

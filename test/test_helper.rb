@@ -281,7 +281,7 @@ class ActiveSupport::TestCase
           send(http_method, url, parameters, credentials(@user.login, 'my_password'))
         end
 
-        should_respond_with success_code
+        should respond_with success_code
         should_respond_with_content_type_based_on_url(url)
         should "login as the user" do
           assert_equal @user, User.current
@@ -294,7 +294,7 @@ class ActiveSupport::TestCase
           send(http_method, url, parameters, credentials(@user.login, 'wrong_password'))
         end
 
-        should_respond_with failure_code
+        should respond_with failure_code
         should_respond_with_content_type_based_on_url(url)
         should "not login as the user" do
           assert_equal User.anonymous, User.current
@@ -306,7 +306,7 @@ class ActiveSupport::TestCase
           send(http_method, url, parameters)
         end
 
-        should_respond_with failure_code
+        should respond_with failure_code
         should_respond_with_content_type_based_on_url(url)
         should "include_www_authenticate_header" do
           assert @controller.response.headers.has_key?('WWW-Authenticate')
@@ -336,7 +336,7 @@ class ActiveSupport::TestCase
           send(http_method, url, parameters, credentials(@token.value, 'X'))
         end
 
-        should_respond_with success_code
+        should respond_with success_code
         should_respond_with_content_type_based_on_url(url)
         should_be_a_valid_response_string_based_on_url(url)
         should "login as the user" do
@@ -351,7 +351,7 @@ class ActiveSupport::TestCase
           send(http_method, url, parameters, credentials(@token.value, 'X'))
         end
 
-        should_respond_with failure_code
+        should respond_with failure_code
         should_respond_with_content_type_based_on_url(url)
         should "not login as the user" do
           assert_equal User.anonymous, User.current
@@ -386,7 +386,7 @@ class ActiveSupport::TestCase
           send(http_method, request_url, parameters)
         end
 
-        should_respond_with success_code
+        should respond_with success_code
         should_respond_with_content_type_based_on_url(url)
         should_be_a_valid_response_string_based_on_url(url)
         should "login as the user" do
@@ -407,7 +407,7 @@ class ActiveSupport::TestCase
           send(http_method, request_url, parameters)
         end
 
-        should_respond_with failure_code
+        should respond_with failure_code
         should_respond_with_content_type_based_on_url(url)
         should "not login as the user" do
           assert_equal User.anonymous, User.current
@@ -422,7 +422,7 @@ class ActiveSupport::TestCase
         send(http_method, url, parameters, {'X-Redmine-API-Key' => @token.value.to_s})
       end
 
-      should_respond_with success_code
+      should respond_with success_code
       should_respond_with_content_type_based_on_url(url)
       should_be_a_valid_response_string_based_on_url(url)
       should "login as the user" do
@@ -440,9 +440,9 @@ class ActiveSupport::TestCase
   def self.should_respond_with_content_type_based_on_url(url)
     case
     when url.match(/xml/i)
-      should_respond_with_content_type :xml
+      should respond_with_content_type :xml
     when url.match(/json/i)
-      should_respond_with_content_type :json
+      should respond_with_content_type :json
     else
       raise "Unknown content type for should_respond_with_content_type_based_on_url: #{url}"
     end

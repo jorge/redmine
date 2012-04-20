@@ -75,6 +75,7 @@ module WatchersHelper
         # and appened the user's name to the end of their check-box
         check_box_tag('issue[watchter_user_ids][]', user.id, c, :id => nil).concat("#{user}")
       end
-    end.join
+    # now turn the array into a string and format it for html parsing
+    end.join.html_safe
   end
 end

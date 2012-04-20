@@ -24,7 +24,7 @@
       <p id="watchers_form"><label><%= l(:label_issue_watchers) %></label>
       <span id="watchers_inputs">
         <!-- added .html_safe to this method call to fix character parsing -->
-        <%= watchers_checkboxes(@issue, @available_watchers).html_safe %>
+        <%= watchers_checkboxes(@issue, @available_watchers) %>
       </span>
       <span class="search_for_watchers">
       <%= link_to_remote l(:label_search_for_watchers),

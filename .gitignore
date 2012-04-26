@@ -24,7 +24,7 @@
 /vendor/cache
 /vendor/rails
 *.rbc
-
+nohup.out
 /.bundle
 /Gemfile.lock
 /Gemfile.local

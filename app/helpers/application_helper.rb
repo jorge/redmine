@@ -316,7 +316,8 @@ module ApplicationHelper
     unless groups.empty?
       s << %(<optgroup label="#{h(l(:label_group_plural))}">#{groups}</optgroup>)
     end
-    s
+    # return the string formatted for html parsing
+    s.html_safe
   end
 
   # Truncates and returns the string as a single line

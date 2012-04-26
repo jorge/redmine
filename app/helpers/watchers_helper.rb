@@ -65,10 +65,17 @@ module WatchersHelper
   end
 
   def watchers_checkboxes(object, users, checked=nil)
+    # separate the users hash into an array
     users.map do |user|
+      # set the 'checked' flag
       c = checked.nil? ? object.watched_by?(user) : checked
-      tag = check_box_tag 'issue[watcher_user_ids][]', user.id, c, :id => nil
-      content_tag 'label', "#{tag} #{h(user)}", :id => "issue_watcher_user_ids_#{user.id}", :class => "floating"
-    end.join
+      # create a 'label' tag to encapsulate each check-box
+      content_tag('label', :id => "issue_watcher_user_ids_#{user.id}", :class => "floating") do
+        # create a check-box for each possible watcher
+        # and appened the user's name to the end of their check-box
+        check_box_tag('issue[watchter_user_ids][]', user.id, c, :id => nil).concat("#{user}")
+      end
+    # now turn the array into a string and format it for html parsing
+    end.join.html_safe
   end
 end

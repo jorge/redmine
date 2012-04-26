@@ -45,13 +45,13 @@ group :openid do
   gem "ruby-openid", "~> 2.1.4", :require => "openid"
 end
 
-# Optional gem for exporting the gantt to a PNG file
-group :rmagick do
-  # RMagick 2 supports ruby 1.9
-  # RMagick 1 would be fine for ruby 1.8 but Bundler does not support
-  # different requirements for the same gem on different platforms
-  gem "rmagick", ">= 2.0.0"
-end
+# # Optional gem for exporting the gantt to a PNG file
+# group :rmagick do
+#   # RMagick 2 supports ruby 1.9
+#   # RMagick 1 would be fine for ruby 1.8 but Bundler does not support
+#   # different requirements for the same gem on different platforms
+#   gem "rmagick", ">= 2.0.0"
+# end
 
 # Database gems
 platforms :mri, :mingw do
@@ -61,18 +61,6 @@ platforms :mri, :mingw do
 
   group :sqlite do
     gem "sqlite3"
-  end
-end
-
-platforms :mri_18, :mingw_18 do
-  group :mysql do
-    gem "mysql"
-  end
-end
-
-platforms :mri_19, :mingw_19 do
-  group :mysql do
-    gem "mysql2"
   end
 end
 
